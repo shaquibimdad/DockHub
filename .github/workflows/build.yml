@@ -1,0 +1,39 @@
+name: Build and push docker images to dockerhub
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'push' &&
+      startsWith(github.event.head_commit.message, 'docker-build:')
+    steps:
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Extract Folder Name
+        run: |
+             COMMIT_MESSAGE=$(echo ${{ github.event.head_commit.message }})
+             FOLDER_NAME=$(echo "$COMMIT_MESSAGE" | awk -F':| ' '{print $2}')
+             echo "FOLDER_NAME=$FOLDER_NAME" >> "$GITHUB_ENV"
+      -
+        name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: "{{defaultContext}}:${{ env.FOLDER_NAME }}"
+          push: true
+          tags: "shaquibimdad/${{ env.FOLDER_NAME }}:v${{ github.run_number }}"
