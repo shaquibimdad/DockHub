@@ -12,6 +12,11 @@ jobs:
       github.event_name == 'push' &&
       startsWith(github.event.head_commit.message, 'docker-build:')
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+          token: ${{ secrets.MYTOKEN }}
       -
         name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -34,6 +39,10 @@ jobs:
         name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: "{{defaultContext}}:${{ env.FOLDER_NAME }}"
+          run: ls -la
+          context: ./${{ env.FOLDER_NAME }}
+          # context: "{{defaultContext}}:${{ env.FOLDER_NAME }}"
           push: true
           tags: "shaquibimdad/${{ env.FOLDER_NAME }}:v${{ github.run_number }}"
+          # secrets: |
+          #   GIT_AUTH_TOKEN=${{ secrets.MYTOKEN }}
