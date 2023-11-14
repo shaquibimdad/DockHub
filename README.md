@@ -1,6 +1,6 @@
 # DockHub
 
-This project streamlines the process of building and pushing Different Docker images to DockerHub effortlessly. By adhering to a clear commit message format (`docker-build:subdir_name`), you can trigger an automated workflow to build and publish Docker images for specific subdirectories.
+This project streamlines the process of building and pushing Different Docker images to DockerHub effortlessly. By adhering to a clear commit message format (`build:subdir_name:tag`), you can trigger an automated workflow to build and publish Docker images for specific subdirectories.
 
 ## Features:
 
@@ -40,18 +40,18 @@ After forking the repository, navigate to your forked repository on GitHub. Then
 
 #### 4. Start Automated Docker Builds
 
-Now that you've forked the repository and added the DockerHub access token as a secret, you're ready to trigger automated Docker builds. Simply create a new folder inside the fork repo and commit with the specified format (`docker-build:subdir_name`) for the subdirectory you want to build, and the workflow will take care of the rest!
+Now that you've forked the repository and added the DockerHub access token as a secret, you're ready to trigger automated Docker builds. Simply create a new folder inside the fork repo and commit with the specified format (`build:subdir_name`) for the subdirectory you want to build, and the workflow will take care of the rest!
 
 ## Usage:
 
 #### Commit Message Format:
 To initiate the automated Docker image build and push workflow, use the following commit message format:
 
-- `docker-build:subdir_name`
+- `build:subdir_name:tag`
 
 For instance, to build and push Docker images for the "android-env-ubuntu" directory, use the commit message:
 
-- `docker-build:android-env-ubuntu`
+- `build:android-env-ubuntu:1`
 
 Streamline your Docker image deployment process with this efficient and easy-to-use GitHub workflow.
 

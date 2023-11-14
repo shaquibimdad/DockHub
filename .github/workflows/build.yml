@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       github.event_name == 'push' &&
-      startsWith(github.event.head_commit.message, 'docker-build:')
+      startsWith(github.event.head_commit.message, 'build:')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,19 +30,18 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       -
-        name: Extract Folder Name
+        name: Extract Folder Name and Tag 
         run: |
              COMMIT_MESSAGE=$(echo ${{ github.event.head_commit.message }})
              FOLDER_NAME=$(echo "$COMMIT_MESSAGE" | awk -F':| ' '{print $2}')
+             TAG=$(echo "$COMMIT_MESSAGE" | awk -F':| ' '{print $3}')
              echo "FOLDER_NAME=$FOLDER_NAME" >> "$GITHUB_ENV"
+             echo "TAG=$TAG" >> "$GITHUB_ENV"
       -
         name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          run: ls -la
           context: ./${{ env.FOLDER_NAME }}
           # context: "{{defaultContext}}:${{ env.FOLDER_NAME }}"
           push: true
-          tags: "shaquibimdad/${{ env.FOLDER_NAME }}:v${{ github.run_number }}"
-          # secrets: |
-          #   GIT_AUTH_TOKEN=${{ secrets.MYTOKEN }}
+          tags: "shaquibimdad/${{ env.FOLDER_NAME }}:v${{ env.TAG }}"
