@@ -10,7 +10,7 @@ This project streamlines the process of building and pushing Different Docker im
 
 - **Tag Management:** Automatically manage versioned tags for each build, providing clarity and traceability for your Docker images.
 
-## Getting Started with DockHub:
+## Getting Started with DockHub: 
 
 To begin using DockHub and enable automated Docker builds for your subdirectories, follow these steps:
 
